@@ -43,18 +43,17 @@ public class SubmittingFormTest {
         open("http://localhost:9999/");
         $("[data-test-id=name] input").setValue("Петр Иванов");
         $("[data-test-id='phone'] input").setValue("+79005557777");
+        $("[data-test-id='agreement']").click();
         $(".button__content").click();
-        $$(".input__sub").last().shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй"));
+        $("data-test-id=order-success").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй."));
+
     }
 
     @Test
-    void shouldFieldsEmpty() {
-        open("http://localhost:9999/");
-    $("[data-test-id=name] input").setValue(null);
-    $("[data-test-id=phone] input").setValue(null);
-    $(".checkbox__box").click();
-    $(".button").click();
-    $$(".input__sub").last().shouldHave(exactText("Поле обязательно для заполнения"));
-
-   }
+    void shouldGetErrorIfOnlyAgreement() {
+        $("[data-test-id=agreement]").click();
+        $("[type=button] span").click();
+        $("[data-test-id=name].input_invalid .input__sub");
+        $(".input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
+    }
 }
