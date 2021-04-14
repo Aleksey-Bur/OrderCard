@@ -37,4 +37,22 @@ public class SubmittingFormTest {
         $(".button__content").click();
         $$(".input__sub").last().shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
+
+    @Test
+    void shouldTestNotAgreement() {
+        open("http://localhost:9999/");
+        $("[data-test-id=name] input").setValue("Петр Иванов");
+        $("[data-test-id='phone'] input").setValue("+79005557777");
+        $("[data-test-id='agreement']").click();
+        $(".button__content").click();
+        $$(".input__sub").last().shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй"));
+    }
+
+    @Test
+    void shouldFieldsEmpty() {
+        open("http://localhost:9999/");
+        $("[data-test-id='agreement']").click();
+        $(".button__content").click();
+        $$(".input__sub").last().shouldHave(exactText("Поле обязательно для заполнения"));
+    }
 }
